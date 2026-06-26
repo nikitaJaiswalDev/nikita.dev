@@ -1,0 +1,224 @@
+{
+  "personal": {
+    "name": "Nikita Jaiswal",
+    "title": "Senior Software Engineer",
+    "tagline": "Building scalable systems and elegant interfaces. 5+ years shipping production code.",
+    "email": "nikujais2405@gmail.com",
+    "github": "https://github.com/nikitaJaiswalDev",
+    "linkedin": "https://www.linkedin.com/in/nikita-jaiswal-a20583202"
+  },
+  "about": {
+    "summary": "Senior Full Stack Developer with 5+ years of experience building scalable web applications and integrating AI/LLM solutions. Proven track record in microservices architecture, RESTful API design, and cloud deployments on AWS and GCP. Experienced in healthcare technology and insurance platforms.",
+    "highlights": [
+      "Increased user engagement by 30% on an AI-powered healthcare platform",
+      "Reduced project costs by 20% through reusable microservice modules",
+      "Improved workflow efficiency by 25% via optimized data processing pipelines",
+      "Built HIPAA-compliant systems handling Protected Health Information (PHI)"
+    ],
+    "philosophy": ""
+  },
+  "skills": {
+    "languages": [
+      "TypeScript",
+      "JavaScript",
+      "Python"
+    ],
+    "frontend": [
+      "React",
+      "Next.js",
+      "Vue.js",
+      "Redux",
+      "Tailwind CSS",
+      "GraphQL"
+    ],
+    "backend": [
+      "Node.js",
+      "Nest.js",
+      "Django",
+      "FastAPI",
+      "gRPC",
+      "GraphQL"
+    ],
+    "cloud": [
+      "AWS",
+      "GCP",
+      "Docker"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "Redis",
+      "MongoDB",
+      "DynamoDB"
+    ],
+    "tools": [
+      "Git",
+      "CI/CD",
+      "Bravo",
+      "Datadog",
+      "Zapier/N8N/Make.com"
+    ]
+  },
+  "experience": [
+    {
+      "company": "RTE Softwares",
+      "role": "Senior Software Developer",
+      "type": "AI-powered healthcare solutions",
+      "period": "March 2025 — March 2026",
+      "description": "Led end-to-end development of an AI-powered healthcare platform for lab test management. Architected microservices backend and integrated third-party lab APIs, payment gateways, and authentication providers.",
+      "achievements": [
+        "Increased user engagement by 30% through full platform development",
+        "Architected microservices backend improving modularity and scalability",
+        "Integrated payment gateways, lab APIs, and auth providers end-to-end",
+        "Deployed LogRocket for session monitoring and proactive issue detection"
+      ],
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "Python",
+        "AWS",
+        "GCP",
+        "PostgreSQL",
+        "Docker"
+      ]
+    },
+    {
+      "company": "S V Technologies",
+      "role": "Backend Software Engineer",
+      "type": "Insurance technology solutions",
+      "period": "August 2024 — March 2025",
+      "description": "Designed large-scale product detail extraction systems for insurance clients using NestJS microservices. Focused on reusable service modules and inter-service communication optimization.",
+      "achievements": [
+        "Reduced project costs by 20% through reusable service module development",
+        "Improved workflow efficiency by 25% via streamlined data processing pipelines",
+        "Built modular NestJS microservices for independently deployable backend services"
+      ],
+      "technologies": [
+        "NestJS",
+        "Node.js",
+        "PostgreSQL",
+        "MongoDB",
+        "Microservices"
+      ]
+    },
+    {
+      "company": "LN Webworks Private Limited",
+      "role": "Full Stack Developer",
+      "type": "Web development and digital solutions",
+      "period": "August 2021 — August 2024",
+      "description": "Built responsive web applications for enterprise clients using React.js, Next.js, and Vue.js. Implemented Pub/Sub messaging architecture and gRPC for high-performance distributed systems.",
+      "achievements": [
+        "Enhanced data reliability by 30% via Pub/Sub messaging architecture",
+        "Reduced API latency using gRPC for inter-service communication",
+        "Received Employee of the Month and Rising Star Award (2022)"
+      ],
+      "technologies": [
+        "React.js",
+        "Next.js",
+        "Vue.js",
+        "Node.js",
+        "Python",
+        "gRPC",
+        "MongoDB",
+        "PostgreSQL"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Moonaria",
+      "tagline": "AI-Powered Mental Healthcare Platform",
+      "period": "August 2025 — March 2026",
+      "description": "AI-assisted clinical notes generation system for healthcare providers using LLM integration. HIPAA-compliant with secure PHI handling, authentication, and data encryption.",
+      "achievements": [
+        "Reduced manual clinical documentation time significantly",
+        "HIPAA-compliant PHI handling with encryption",
+        "LLM-powered notes generation integrated with cloud services"
+      ],
+      "technologies": [
+        "React.js",
+        "Node.js",
+        "AWS",
+        "GCP",
+        "LLM",
+        "PostgreSQL"
+      ],
+      "architecture": "Monolithic + Cloud-integrated",
+      "live": "https://moonaria.app",
+      "featured": true
+    },
+    {
+      "name": "BEEK Health",
+      "tagline": "Digital Lab Test Platform",
+      "period": "January 2025 — July 2025",
+      "description": "Digital health platform for lab test purchases, user registration, and automated notifications from order placement through report delivery. Deployed on AWS for scalability and real-time data handling.",
+      "achievements": [
+        "End-to-end lab test workflow automation",
+        "RESTful APIs connecting frontend, backend, and third-party lab services",
+        "Real-time notifications from order to report delivery"
+      ],
+      "technologies": [
+        "React.js",
+        "Python",
+        "AWS",
+        "PostgreSQL"
+      ],
+      "architecture": "Cloud-based (AWS)",
+      "live": "https://app.beekhealth.com/login",
+      "featured": true
+    },
+    {
+      "name": "BANG JAMIN",
+      "tagline": "Vehicle Insurance Management Platform",
+      "period": "August 2024 — March 2025",
+      "description": "Comprehensive insurance platform supporting policy purchase, management, and claims tracking with independently deployable NestJS microservices backend.",
+      "achievements": [
+        "Full policy lifecycle — purchase, management, claims tracking",
+        "Microservices with independent deployability per service",
+        "Modular NestJS architecture for long-term scalability"
+      ],
+      "technologies": [
+        "NestJS",
+        "Node.js",
+        "PostgreSQL",
+        "MongoDB"
+      ],
+      "architecture": "Microservices",
+      "live": "https://bangjamin.com",
+      "featured": true
+    },
+    {
+      "name": "BMG",
+      "tagline": "AI Song Classification System",
+      "period": "February 2023 — March 2024",
+      "description": "AI-powered music classification system using ML models on GCP Vertex AI. Classifies songs by genre, mood, and tempo with automated audio/video tagging pipeline.",
+      "achievements": [
+        "Grew music library database by 50% through automated ML tagging",
+        "ML classification for genre, mood, and tempo at scale",
+        "FastAPI backend connecting React frontend with Vertex AI ML services"
+      ],
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "React.js",
+        "PostgreSQL",
+        "Vertex AI",
+        "GCP"
+      ],
+      "architecture": "ML-powered service-based",
+      "live": null,
+      "featured": false
+    }
+  ],
+  "availability": {
+    "heading": "Available for Freelance & Contract Work",
+    "subheading": "Open to React.js, Node.js, Python, and AI integration projects. Full stack development, microservices architecture, and cloud deployments.",
+    "status": "Actively available — immediate start",
+    "cta_email": "nikujais2405@gmail.com",
+    "cta_linkedin": "https://www.linkedin.com/in/nikita-jaiswal-a20583202"
+  },
+  "contact": {
+    "heading": "Let's build something together",
+    "subheading": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.",
+    "availability": "Available for consulting and advisory roles starting Q3 2025"
+  }
+}
