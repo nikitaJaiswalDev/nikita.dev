@@ -3,8 +3,61 @@ import { NextResponse } from 'next/server'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
+// In-memory rate limiting store mapping IP address -> timestamps of submissions
+const submissions = new Map<string, number[]>()
+
+// Clean up old entries every hour to prevent memory leaks
+if (typeof global !== 'undefined') {
+  const globalAny = global as any
+  if (!globalAny.contactRateLimitInterval) {
+    const interval = setInterval(() => {
+      const now = Date.now()
+      submissions.forEach((timestamps: number[], ip: string) => {
+        const recent = timestamps.filter((t: number) => now - t < 3600000)
+        if (recent.length === 0) {
+          submissions.delete(ip)
+        } else {
+          submissions.set(ip, recent)
+        }
+      })
+    }, 3600000)
+    
+    // Unref interval if possible to prevent blocking process termination in Node.js
+    if (interval && typeof interval.unref === 'function') {
+      interval.unref()
+    }
+    globalAny.contactRateLimitInterval = interval
+  }
+}
+
 export async function POST(request: Request) {
   try {
+    // Extract IP from standard proxy headers, falling back to localhost
+    const ip = request.headers.get('x-forwarded-for')?.split(',')[0].trim() || 
+               request.headers.get('x-real-ip') || 
+               '127.0.0.1'
+
+    const now = Date.now()
+    const ipSubmissions = submissions.get(ip) || []
+
+    // Keep only submissions in the last hour
+    const recentSubmissions = ipSubmissions.filter((t: number) => now - t < 3600000)
+
+    if (recentSubmissions.length >= 3) {
+      return NextResponse.json(
+        { 
+          success: false, 
+          error: 'Too many submissions. Please try again later.',
+          message: 'Too many submissions. Please try again later.'
+        },
+        { status: 429 }
+      )
+    }
+
+    // Record this submission
+    recentSubmissions.push(now)
+    submissions.set(ip, recentSubmissions)
+
     const { name, email, subject, message } = await request.json()
 
     if (!name || !email || !subject || !message) {

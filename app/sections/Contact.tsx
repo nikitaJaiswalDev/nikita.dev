@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import { Check, Loader2 } from 'lucide-react';
 import content from '../../content.json';
+import { Turnstile } from '@marsidev/react-turnstile';
+import type { TurnstileInstance } from '@marsidev/react-turnstile';
 
 export default function Contact() {
   const { contact } = content;
@@ -25,6 +27,8 @@ export default function Contact() {
   const [submitError, setSubmitError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [turnstileToken, setTurnstileToken] = useState<string | null>(null);
+  const turnstileRef = useRef<TurnstileInstance>(null);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -86,7 +90,10 @@ export default function Contact() {
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify({
+          ...formData,
+          turnstileToken
+        })
       });
 
       const data = await response.json();
@@ -94,9 +101,13 @@ export default function Contact() {
         setIsSuccess(true);
       } else {
         setSubmitError(data.error || 'Something went wrong. Please email directly at nikujais2405@gmail.com');
+        setTurnstileToken(null);
+        turnstileRef.current?.reset();
       }
     } catch (err) {
       setSubmitError('Something went wrong. Please email directly at nikujais2405@gmail.com');
+      setTurnstileToken(null);
+      turnstileRef.current?.reset();
     } finally {
       setIsLoading(false);
     }
@@ -112,6 +123,8 @@ export default function Contact() {
     setErrors({});
     setSubmitError('');
     setIsSuccess(false);
+    setTurnstileToken(null);
+    turnstileRef.current?.reset();
   };
 
   const getInputClassName = (fieldName: keyof typeof errors) => {
@@ -264,10 +277,21 @@ export default function Contact() {
                 </div>
               )}
 
+              {/* Turnstile Widget */}
+              <div className="flex justify-center my-2">
+                <Turnstile
+                  ref={turnstileRef}
+                  siteKey={process.env.NEXT_PUBLIC_TURNSTILE_SITE_KEY || ''}
+                  onSuccess={(token) => setTurnstileToken(token)}
+                  onExpire={() => setTurnstileToken(null)}
+                  onError={() => setTurnstileToken(null)}
+                />
+              </div>
+
               {/* Submit Button */}
               <button
                 type="submit"
-                disabled={isLoading}
+                disabled={isLoading || !turnstileToken}
                 className="w-full bg-[#6C63FF] text-white rounded-[8px] py-[14px] font-semibold transition-all hover:bg-[#5b54e6] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center"
               >
                 {isLoading ? (
