@@ -1,6 +1,6 @@
 import './globals.css';
 import type { Metadata } from 'next';
-import { Inter, Space_Grotesk, JetBrains_Mono } from 'next/font/google';
+import { Caveat, Inter, JetBrains_Mono, Source_Serif_4 } from 'next/font/google';
 import Navbar from '@/components/Navbar';
 import ChatWidget from '@/components/ChatWidget';
 
@@ -10,11 +10,18 @@ const inter = Inter({
   display: 'swap',
 });
 
-const spaceGrotesk = Space_Grotesk({
+const sourceSerif = Source_Serif_4({
   subsets: ['latin'],
-  variable: '--font-space-grotesk',
+  variable: '--font-display',
   display: 'swap',
-  weight: ['400', '500', '600', '700'],
+  weight: ['500', '600', '700'],
+});
+
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-hand',
+  display: 'swap',
+  weight: ['500'],
 });
 
 const jetbrainsMono = JetBrains_Mono({
@@ -24,8 +31,8 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Nikita Jaiswal — Senior Full Stack Developer',
-  description: 'Building scalable systems and elegant interfaces. 5+ years shipping production code.'
+  title: 'Nikita Jaiswal — AI Product Engineer',
+  description: 'AI Product Engineer building and shipping AI products end-to-end: voice agents, RAG pipelines, clinical AI, billing and auth.'
 };
 
 export default function RootLayout({
@@ -34,9 +41,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body
-        className={`${inter.variable} ${spaceGrotesk.variable} ${jetbrainsMono.variable} font-sans antialiased`}
+        className={`${inter.variable} ${sourceSerif.variable} ${caveat.variable} ${jetbrainsMono.variable} bg-page font-sans text-ink antialiased`}
       >
         <Navbar />
         {children}

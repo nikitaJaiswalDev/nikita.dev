@@ -11,8 +11,18 @@ const config: Config = {
     extend: {
       fontFamily: {
         sans: ['var(--font-inter)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
-        display: ['var(--font-space-grotesk)', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: ['var(--font-display)', 'ui-serif', 'Georgia', 'serif'],
+        hand: ['var(--font-hand)', 'cursive'],
         mono: ['var(--font-jetbrains-mono)', 'ui-monospace', 'monospace'],
+      },
+      // Extra opacity steps used with token colors (e.g. bg-brand/8)
+      opacity: {
+        8: '0.08',
+        15: '0.15',
+        85: '0.85',
+      },
+      transitionTimingFunction: {
+        'out-expo': 'cubic-bezier(0.22, 1, 0.36, 1)',
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
@@ -25,6 +35,28 @@ const config: Config = {
         sm: 'calc(var(--radius) - 4px)',
       },
       colors: {
+        // Site palette — values defined once in app/globals.css (:root --c-*)
+        page: 'rgb(var(--c-page) / <alpha-value>)',
+        surface: 'rgb(var(--c-surface) / <alpha-value>)',
+        elevated: 'rgb(var(--c-elevated) / <alpha-value>)',
+        code: 'rgb(var(--c-code) / <alpha-value>)',
+        ink: 'rgb(var(--c-ink) / <alpha-value>)',
+        subtle: 'rgb(var(--c-subtle) / <alpha-value>)',
+        faint: 'rgb(var(--c-faint) / <alpha-value>)',
+        line: {
+          DEFAULT: 'rgb(var(--c-line) / <alpha-value>)',
+          strong: 'rgb(var(--c-line-strong) / <alpha-value>)',
+        },
+        brand: {
+          DEFAULT: 'rgb(var(--c-brand) / <alpha-value>)',
+          hover: 'rgb(var(--c-brand-hover) / <alpha-value>)',
+          soft: 'rgb(var(--c-brand-soft) / <alpha-value>)',
+          tint: 'rgb(var(--c-brand-tint) / <alpha-value>)',
+          2: 'rgb(var(--c-brand-2) / <alpha-value>)',
+        },
+        highlight: 'rgb(var(--c-highlight) / <alpha-value>)',
+        danger: 'rgb(var(--c-danger) / <alpha-value>)',
+        success: 'rgb(var(--c-success) / <alpha-value>)',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',
         card: {

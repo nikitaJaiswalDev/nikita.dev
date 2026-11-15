@@ -4,62 +4,144 @@
 
 @layer base {
   :root {
-    --bg-page: #0D0D1A;
-    --bg-section: #0F1628;
-    --bg-card: #141830;
-    --bg-input: #0D0D1A;
-    --accent-primary: #6C63FF;
-    --accent-secondary: #00D9FF;
-    --text-primary: #F0F0F5;
-    --text-muted: #8892A4;
-    --border-color: #1E2A45;
+    /* ── Design tokens ─────────────────────────────────────────────
+       Single source of truth for the site palette. Stored as RGB
+       channels so Tailwind opacity modifiers work (e.g. bg-brand/10).
+       Tailwind names live in tailwind.config.ts → theme.extend.colors. */
+    --c-page: 245 248 253;        /* page background (cool off-white) */
+    --c-surface: 236 242 251;     /* tinted band / strip background */
+    --c-elevated: 255 255 255;    /* cards */
+    --c-code: 241 245 251;        /* inputs */
+    --c-ink: 14 29 58;            /* headings, primary text (deep navy) */
+    --c-subtle: 71 85 112;        /* body text */
+    --c-faint: 128 141 166;       /* captions, placeholders */
+    --c-line: 222 230 241;        /* borders, dividers */
+    --c-line-strong: 196 210 230; /* hovered borders */
+    --c-brand: 27 58 107;         /* primary: navy buttons, banner */
+    --c-brand-hover: 18 42 82;
+    --c-brand-soft: 52 104 199;   /* blue accents: icons, links, eyebrow marker */
+    --c-brand-tint: 225 236 251;  /* chips, icon tiles */
+    --c-highlight: 196 219 248;   /* marker highlight behind hero words */
+    --c-brand-2: 22 163 105;      /* status only: live / available */
+    --c-danger: 220 38 38;
+    --c-success: 22 163 105;
 
-    --background: 240 20% 4%;
-    --foreground: 240 10% 96%;
-    --card: 240 18% 8%;
-    --card-foreground: 240 10% 96%;
-    --popover: 240 18% 8%;
-    --popover-foreground: 240 10% 96%;
-    --primary: 245 100% 70%;
-    --primary-foreground: 240 10% 96%;
-    --secondary: 192 100% 50%;
-    --secondary-foreground: 240 10% 96%;
-    --muted: 240 15% 12%;
-    --muted-foreground: 240 10% 52%;
-    --accent: 240 15% 12%;
-    --accent-foreground: 240 10% 96%;
-    --destructive: 0 84.2% 60.2%;
+    /* shadcn/ui tokens (components/ui) — kept in step with the palette */
+    --background: 216 60% 98%;
+    --foreground: 218 61% 14%;
+    --card: 0 0% 100%;
+    --card-foreground: 218 61% 14%;
+    --popover: 0 0% 100%;
+    --popover-foreground: 218 61% 14%;
+    --primary: 217 60% 26%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 216 74% 94%;
+    --secondary-foreground: 218 61% 14%;
+    --muted: 216 60% 95%;
+    --muted-foreground: 219 22% 36%;
+    --accent: 216 74% 94%;
+    --accent-foreground: 218 61% 14%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
-    --border: 240 15% 14%;
-    --input: 240 15% 14%;
-    --ring: 245 100% 70%;
-    --radius: 0.5rem;
+    --border: 215 45% 91%;
+    --input: 215 45% 91%;
+    --ring: 219 59% 49%;
+    --radius: 0.75rem;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    scroll-padding-top: 5rem;
   }
 
   body {
-    background-color: var(--bg-page);
-    color: var(--text-primary);
+    background-color: rgb(var(--c-page));
+    color: rgb(var(--c-ink));
+    font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+    font-feature-settings: 'cv11', 'ss01';
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2 {
+    font-family: var(--font-display), ui-serif, Georgia, serif;
+    letter-spacing: -0.015em;
+  }
+  h3, h4, h5, h6 {
     font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
   }
 
-  h1 {
-    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 800;
-    font-size: clamp(48px, 7vw, 80px);
+  ::selection {
+    background: rgb(var(--c-highlight));
+    color: rgb(var(--c-ink));
   }
 
-  h2 {
-    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
-    font-weight: 700;
-    font-size: clamp(32px, 4vw, 48px);
-    background: linear-gradient(90deg, #F0F0F5 70%, #6C63FF 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+  :focus-visible {
+    outline: 2px solid rgb(var(--c-brand-soft));
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* ■ SMALL CAPS LABEL ——  above section titles */
+  .eyebrow {
+    @apply inline-flex items-center gap-2.5 text-[11px] font-semibold uppercase tracking-[0.16em] text-ink;
+  }
+  .eyebrow::before {
+    content: '';
+    @apply h-2 w-2 rounded-[2px] bg-brand-soft;
+  }
+  .eyebrow-line::after {
+    content: '';
+    @apply ml-1 h-px w-10 bg-brand-soft/50;
   }
 
-  h3, h4, h5, h6 {
-    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  /* Light blue pill for tech / topic tags */
+  .tag {
+    @apply inline-flex items-center rounded-full bg-brand-tint px-3 py-1 text-xs font-medium text-brand-soft;
+  }
+
+  /* Rounded square icon holder */
+  .icon-tile {
+    @apply flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-brand-tint text-brand-soft;
+  }
+
+  /* White card with soft shadow */
+  .panel {
+    @apply rounded-2xl border border-line bg-elevated shadow-[0_1px_2px_rgb(var(--c-ink)/0.04),0_8px_24px_-12px_rgb(var(--c-ink)/0.12)] transition-all duration-300;
+  }
+  .panel-hover:hover {
+    @apply -translate-y-0.5 border-line-strong shadow-[0_2px_4px_rgb(var(--c-ink)/0.04),0_16px_40px_-16px_rgb(var(--c-ink)/0.22)];
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-semibold transition-colors duration-200;
+  }
+  .btn-primary {
+    @apply btn bg-brand text-white shadow-[0_8px_20px_-8px_rgb(var(--c-brand)/0.6)] hover:bg-brand-hover;
+  }
+  .btn-ghost {
+    @apply btn border-[1.5px] border-brand text-brand hover:bg-brand-tint;
+  }
+  .btn-light {
+    @apply btn bg-white text-brand hover:bg-brand-tint;
+  }
+
+  /* Marker-pen highlight behind a phrase */
+  .highlight {
+    background-image: linear-gradient(
+      100deg,
+      transparent 0.5%,
+      rgb(var(--c-highlight)) 2%,
+      rgb(var(--c-highlight)) 97%,
+      transparent 99%
+    );
+    background-size: 100% 0.55em;
+    background-position: 0 85%;
+    background-repeat: no-repeat;
+    border-radius: 0.2em;
+    padding: 0 0.12em;
+    -webkit-box-decoration-break: clone;
+    box-decoration-break: clone;
   }
 }
 
@@ -68,75 +150,12 @@
     font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
   }
 
-  .section-eyebrow {
-    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: #6C63FF;
-    margin-bottom: 8px;
-    display: block;
-  }
-
-  .gradient-text {
-    background: linear-gradient(90deg, #F0F0F5 70%, #6C63FF 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .text-gradient {
-    background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .glow-primary {
-    box-shadow: 0 0 40px rgba(108, 99, 255, 0.15);
-  }
-
-  .glow-secondary {
-    box-shadow: 0 0 40px rgba(0, 217, 255, 0.1);
-  }
-
-  .card-hover {
-    transition: all 0.3s ease;
-  }
-
-  .card-hover:hover {
-    border-color: #6C63FF;
-    box-shadow: 0 0 20px rgba(108, 99, 255, 0.15);
-    transform: translateY(-4px);
-  }
-
-  .skill-chip {
-    background: rgba(108, 99, 255, 0.08);
-    border: 1px solid rgba(108, 99, 255, 0.25);
-    color: #B8B4FF;
-    font-family: var(--font-jetbrains-mono), ui-monospace, monospace;
-    transition: all 0.3s ease;
-  }
-
-  .skill-chip:hover {
-    background: rgba(108, 99, 255, 0.2);
-    border-color: #6C63FF;
-  }
-}
-
-@keyframes gradient-shift {
-  0%, 100% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
 }
 
 @keyframes fade-in-up {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(12px);
   }
   to {
     opacity: 1;
@@ -144,75 +163,46 @@
   }
 }
 
-@keyframes pulse-glow {
-  0%, 100% {
-    box-shadow: 0 0 20px rgba(108, 99, 255, 0.3), 0 0 40px rgba(0, 217, 255, 0.1);
-  }
-  50% {
-    box-shadow: 0 0 30px rgba(108, 99, 255, 0.5), 0 0 60px rgba(0, 217, 255, 0.2);
-  }
-}
-
 .animate-fade-in-up {
-  animation: fade-in-up 0.6s ease-out forwards;
+  animation: fade-in-up 0.5s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.animate-pulse-glow {
-  animation: pulse-glow 6s ease-in-out infinite;
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
-/* Scrollbar styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
-
 ::-webkit-scrollbar-track {
-  background: var(--bg-page);
+  background: rgb(var(--c-page));
 }
-
 ::-webkit-scrollbar-thumb {
-  background: var(--border-color);
+  background: rgb(var(--c-line));
   border-radius: 4px;
 }
-
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a3a5c;
-}
-
-/* Selection styling */
-::selection {
-  background: rgba(108, 99, 255, 0.3);
-  color: var(--text-primary);
+  background: rgb(var(--c-line-strong));
 }
 
 /* Chat widget scrollbar */
 .chat-scroll::-webkit-scrollbar {
   width: 4px;
 }
-
 .chat-scroll::-webkit-scrollbar-track {
   background: transparent;
 }
-
 .chat-scroll::-webkit-scrollbar-thumb {
-  background: #2a3a5c;
+  background: rgb(var(--c-line-strong));
   border-radius: 2px;
-}
-
-@keyframes underline-grow {
-  from { width: 0%; }
-  to { width: 100%; }
-}
-
-@keyframes cursor-blink {
-  from, to { opacity: 1; }
-  50% { opacity: 0; }
-}
-
-.animate-underline {
-  animation: underline-grow 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
-}
-
-.animate-cursor {
-  animation: cursor-blink 0.8s step-end infinite;
 }
