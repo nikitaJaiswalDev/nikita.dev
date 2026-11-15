@@ -1,109 +1,85 @@
-'use client';
+import { ArrowUpRight, Code2, FileCheck2, Layers, ShieldCheck } from 'lucide-react';
+import HeroArt from '@/components/site/HeroArt';
 
-import content from '../../content.json';
+const stats = [
+  { icon: Code2, value: '5+', label: 'Years of experience' },
+  { icon: Layers, value: '4', label: 'Live AI products' },
+  { icon: ShieldCheck, value: '~9k', label: 'Backend tests written' },
+  { icon: FileCheck2, value: '125+', label: 'Clinical forms digitized' },
+];
 
 export default function Hero() {
-  const { personal } = content;
-
   return (
-    <section id="hero" className="relative py-20 px-4 sm:px-6 lg:px-8 overflow-hidden bg-[#0D0D1A] border-b border-[#1E2A45]">
-      {/* Background ambient radial glow */}
-      <div 
-        className="absolute inset-0 pointer-events-none"
-        style={{ background: 'radial-gradient(ellipse at 30% 50%, rgba(108,99,255,0.08) 0%, transparent 65%)' }}
-      />
+    <section id="hero" className="relative overflow-hidden px-4 pb-16 pt-10 sm:px-6 sm:pt-16 lg:px-8">
+      {/* soft side blobs */}
+      <div aria-hidden className="pointer-events-none absolute -left-24 top-1/2 h-64 w-64 rounded-full bg-highlight/50 blur-3xl" />
+      <div aria-hidden className="pointer-events-none absolute -right-24 bottom-0 h-72 w-72 rounded-full bg-highlight/40 blur-3xl" />
 
-      <div className="relative z-10 max-w-6xl mx-auto flex flex-col gap-10">
-        {/* Main Grid */}
-        <div className="grid lg:grid-cols-[1.2fr_0.8fr] gap-8 items-center">
-          {/* Left Side */}
-          <div className="flex flex-col items-start text-left">
-            <span className="font-mono-label text-[11px] font-semibold text-[#6C63FF] tracking-[0.15em] mb-4">
-              AVAILABLE FOR FREELANCE & CONTRACT
-            </span>
-            
-            <div className="relative inline-block mb-4">
-              <h1
-                className="font-[family-name:var(--font-space-grotesk)] text-[#F0F0F5] tracking-tight leading-none"
-                style={{ fontWeight: 800, fontSize: 'clamp(48px, 7vw, 80px)' }}
-              >
-                {personal.name}
-              </h1>
-              <div className="h-[3px] bg-gradient-to-r from-[#6C63FF] to-[#00D9FF] w-full animate-underline mt-2" />
-            </div>
+      <div className="relative mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.05fr_1fr]">
+        <div>
+          <span className="eyebrow eyebrow-line animate-fade-in-up opacity-0">AI Product Engineer</span>
 
-            <div className="text-[20px] text-[#6C63FF] font-semibold mb-4 font-[family-name:var(--font-space-grotesk)] leading-tight">
-              Senior Full Stack Developer
-            </div>
+          <h1
+            className="relative mt-5 animate-fade-in-up text-[clamp(2.4rem,5.2vw,3.9rem)] font-semibold leading-[1.08] text-ink opacity-0"
+            style={{ animationDelay: '80ms' }}
+          >
+            I design, build, and ship <span className="highlight">AI products</span> end&#8209;to&#8209;end.
+            {/* little "spark" strokes */}
+            <svg
+              aria-hidden
+              viewBox="0 0 40 30"
+              className="absolute -top-4 right-[6%] hidden h-8 w-10 text-ink sm:block"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.2"
+              strokeLinecap="round"
+            >
+              <path d="M8 22 L12 8" />
+              <path d="M18 24 L26 12" />
+              <path d="M24 28 L36 24" />
+            </svg>
+          </h1>
 
-            <p className="text-[17px] text-[#8892A4] max-w-[520px] mb-8 leading-relaxed">
-              Building scalable AI-powered applications with Node.js, React.js and cloud architecture. 5+ years shipping production code.
-            </p>
+          <p
+            className="mt-6 max-w-xl animate-fade-in-up text-[17px] leading-relaxed text-subtle opacity-0"
+            style={{ animationDelay: '160ms' }}
+          >
+            I turn ideas into secure, production-ready AI software: voice agents, RAG pipelines and clinical AI, plus
+            the billing, auth and cloud infrastructure they need to run for real users.
+          </p>
 
-            <div className="flex flex-wrap gap-4">
-              <a
-                href="#projects"
-                className="px-6 py-3 rounded-lg bg-[#6C63FF] text-white font-semibold hover:bg-[#574feb] transition-colors duration-300 shadow-lg shadow-[#6C63FF]/20 text-sm"
-              >
-                View My Work
-              </a>
-              <a
-                href={`mailto:${personal.email}`}
-                className="px-6 py-3 rounded-lg border border-[#6C63FF] text-[#6C63FF] font-semibold hover:bg-[rgba(108,99,255,0.08)] transition-all duration-300 text-sm"
-              >
-                Let&apos;s Talk
-              </a>
-            </div>
+          <div
+            className="mt-8 flex animate-fade-in-up flex-wrap gap-3 opacity-0"
+            style={{ animationDelay: '240ms' }}
+          >
+            <a href="#projects" className="btn-primary">
+              Explore my work
+              <ArrowUpRight className="h-4 w-4" />
+            </a>
+            <a href="#contact" className="btn-ghost">
+              Get in touch
+            </a>
           </div>
 
-          {/* Right Side */}
-          <div className="w-full">
-            <div className="w-full bg-[#0D1117] border border-[#1E2A45] rounded-xl p-5 font-mono-label shadow-2xl">
-              {/* macOS window dots */}
-              <div className="flex gap-1.5 mb-5">
-                <span className="w-3 h-3 rounded-full bg-[#FF5F57]"></span>
-                <span className="w-3 h-3 rounded-full bg-[#FFBD2E]"></span>
-                <span className="w-3 h-3 rounded-full bg-[#28CA41]"></span>
-              </div>
-              
-              <div className="text-sm sm:text-base space-y-1.5 text-[#F0F0F5] leading-relaxed">
-                <div>
-                  <span className="text-[#6C63FF]">const</span> nikita = {'{'}
-                </div>
-                <div>&nbsp;&nbsp;role: <span className="text-[#00D9FF]">&quot;Senior Full Stack Dev&quot;</span>,</div>
-                <div>&nbsp;&nbsp;experience: <span className="text-[#00D9FF]">&quot;5+ years&quot;</span>,</div>
-                <div>&nbsp;&nbsp;location: <span className="text-[#00D9FF]">&quot;Ludhiana, India&quot;</span>,</div>
-                <div>&nbsp;&nbsp;available: <span className="text-[#00D9FF]">true</span>,</div>
-                <div>
-                  &nbsp;&nbsp;focus: [<span className="text-[#00D9FF]">&quot;Node.js&quot;</span>, <span className="text-[#00D9FF]">&quot;React.js&quot;</span>, <span className="text-[#00D9FF]">&quot;AI/LLM&quot;</span>],
-                </div>
-                <div>
-                  {'}'}
-                  <span className="text-[#6C63FF] animate-cursor font-bold ml-1">|</span>
+          <dl
+            className="mt-12 grid animate-fade-in-up grid-cols-2 gap-y-6 opacity-0 sm:grid-cols-4 sm:divide-x sm:divide-line"
+            style={{ animationDelay: '320ms' }}
+          >
+            {stats.map(({ icon: Icon, value, label }) => (
+              <div key={label} className="flex items-center gap-3 sm:px-4 sm:first:pl-0">
+                <Icon className="h-6 w-6 shrink-0 text-ink" strokeWidth={1.6} aria-hidden />
+                {/* dt before dd for valid markup; column-reverse shows the number on top */}
+                <div className="flex flex-col-reverse">
+                  <dt className="mt-1 text-[11px] leading-tight text-subtle">{label}</dt>
+                  <dd className="font-display text-2xl font-semibold leading-none text-ink">{value}</dd>
                 </div>
               </div>
-            </div>
-          </div>
+            ))}
+          </dl>
         </div>
 
-        {/* Stats Row */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-6 pt-8 border-t border-[#1E2A45]/30 w-full mt-4">
-          <div className="flex flex-col">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#6C63FF] font-[family-name:var(--font-space-grotesk)]">5+</span>
-            <span className="text-xs text-[#8892A4] mt-1 font-semibold uppercase tracking-wider">Years Experience</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#6C63FF] font-[family-name:var(--font-space-grotesk)]">4</span>
-            <span className="text-xs text-[#8892A4] mt-1 font-semibold uppercase tracking-wider">Projects Shipped</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#6C63FF] font-[family-name:var(--font-space-grotesk)]">30%</span>
-            <span className="text-xs text-[#8892A4] mt-1 font-semibold uppercase tracking-wider">Avg Performance Gain</span>
-          </div>
-          <div className="flex flex-col">
-            <span className="text-3xl sm:text-4xl font-extrabold text-[#6C63FF] font-[family-name:var(--font-space-grotesk)]">3</span>
-            <span className="text-xs text-[#8892A4] mt-1 font-semibold uppercase tracking-wider">Cloud Platforms</span>
-          </div>
+        <div className="animate-fade-in-up opacity-0" style={{ animationDelay: '200ms' }}>
+          <HeroArt />
         </div>
       </div>
     </section>

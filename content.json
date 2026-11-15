@@ -1,23 +1,41 @@
 {
   "personal": {
     "name": "Nikita Jaiswal",
-    "title": "Senior Software Engineer",
-    "tagline": "Building scalable systems and elegant interfaces. 5+ years shipping production code.",
+    "title": "AI Product Engineer",
+    "tagline": "I build and ship AI products end-to-end: voice agents, RAG pipelines, clinical AI, and the billing and auth systems behind them.",
     "email": "nikujais2405@gmail.com",
     "github": "https://github.com/nikitaJaiswalDev",
-    "linkedin": "https://www.linkedin.com/in/nikita-jaiswal-a20583202"
+    "linkedin": "https://www.linkedin.com/in/nikita-jaiswal-a20583202",
+    "photo": "/nikita.jpg",
+    "location": "Ludhiana, India"
   },
   "about": {
-    "summary": "Senior Full Stack Developer with 5+ years of experience building scalable web applications and integrating AI/LLM solutions. Proven track record in microservices architecture, RESTful API design, and cloud deployments on AWS and GCP. Experienced in healthcare technology and insurance platforms.",
+    "summary": "AI Product Engineer with 5 years of full-stack experience building and shipping AI-powered products. I work across the full AI stack: LLM integration, tool-calling agents, RAG pipelines, real-time voice AI and AI-powered healthcare. I've shipped four live AI products, including a multi-tenant AI voice receptionist platform, an AI mental wellness companion, and an AI scribe + EHR for behavioral-health providers, owning architecture, backend, AI integration, billing and auth end-to-end.",
     "highlights": [
+      "Shipped 4 live AI products: Heymeena, Moonaria Care, Moonaria Insights and Docly",
+      "Built real-time voice AI pipelines on LiveKit (Deepgram → LLM → Cartesia) over SIP telephony",
+      "Owned Stripe billing end-to-end: subscriptions, usage metering, Stripe Tax, reconciliation",
+      "Built HIPAA-oriented systems: AES-256-GCM encryption, RBAC, audit logs, consent and BAA flows",
       "Increased user engagement by 30% on an AI-powered healthcare platform",
-      "Reduced project costs by 20% through reusable microservice modules",
-      "Improved workflow efficiency by 25% via optimized data processing pipelines",
-      "Built HIPAA-compliant systems handling Protected Health Information (PHI)"
+      "Reduced project costs by 20% through reusable microservice modules"
     ],
     "philosophy": ""
   },
   "skills": {
+    "ai": [
+      "Claude (Anthropic API)",
+      "OpenAI API",
+      "AWS Bedrock",
+      "Agent Tool-Calling",
+      "RAG",
+      "Prompt Engineering",
+      "LiveKit Agents",
+      "Deepgram",
+      "Cartesia",
+      "ElevenLabs",
+      "AssemblyAI",
+      "Vertex AI"
+    ],
     "languages": [
       "TypeScript",
       "JavaScript",
@@ -29,42 +47,75 @@
       "Vue.js",
       "Redux",
       "Tailwind CSS",
-      "GraphQL"
+      "Chrome Extensions (MV3)"
     ],
     "backend": [
       "Node.js",
-      "Nest.js",
-      "Django",
+      "NestJS",
+      "Express",
       "FastAPI",
+      "Django",
       "gRPC",
-      "GraphQL"
+      "Prisma",
+      "pg-boss",
+      "Redis"
     ],
     "cloud": [
       "AWS",
       "GCP",
-      "Docker"
+      "Docker",
+      "Terraform",
+      "GitHub Actions"
     ],
     "databases": [
-      "PostgreSQL",
-      "Redis",
+      "PostgreSQL (pgvector)",
+      "Pinecone",
       "MongoDB",
+      "Redis",
       "DynamoDB"
     ],
     "tools": [
+      "Stripe",
       "Git",
-      "CI/CD",
-      "Bravo",
+      "LogRocket",
       "Datadog",
+      "Pub/Sub",
       "Zapier/N8N/Make.com"
     ]
   },
   "experience": [
     {
+      "company": "Independent Contractor",
+      "role": "Freelance AI Product Developer",
+      "type": "AI products: voice AI, clinical AI, SaaS",
+      "period": "March 2026 — Present",
+      "description": "Sole developer on Moonaria Care and Moonaria Insights, and core engineer on Heymeena. Own architecture, backend services, AI integration, billing and identity systems end-to-end.",
+      "achievements": [
+        "Sole developer on Moonaria Care (AI wellness companion) and Moonaria Insights (AI scribe + EHR)",
+        "Core engineer on Heymeena, owning billing, finance, identity/access control and plan entitlements",
+        "Architected and deployed production systems on AWS and GCP with GitHub Actions CI/CD"
+      ],
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "TypeScript",
+        "Next.js",
+        "PostgreSQL",
+        "LiveKit",
+        "Claude",
+        "OpenAI",
+        "Pinecone",
+        "Stripe",
+        "AWS",
+        "GCP"
+      ]
+    },
+    {
       "company": "RTE Softwares",
       "role": "Senior Software Developer",
       "type": "AI-powered healthcare solutions",
       "period": "March 2025 — March 2026",
-      "description": "Led end-to-end development of an AI-powered healthcare platform for lab test management. Architected microservices backend and integrated third-party lab APIs, payment gateways, and authentication providers.",
+      "description": "Led end-to-end development of BEEK Health, an AI-powered lab test management platform. Architected the microservices backend and integrated lab APIs, payment gateways, and authentication providers.",
       "achievements": [
         "Increased user engagement by 30% through full platform development",
         "Architected microservices backend improving modularity and scalability",
@@ -125,26 +176,137 @@
   ],
   "projects": [
     {
-      "name": "Moonaria",
-      "tagline": "AI-Powered Mental Healthcare Platform",
-      "period": "August 2025 — March 2026",
-      "description": "AI-assisted clinical notes generation system for healthcare providers using LLM integration. HIPAA-compliant with secure PHI handling, authentication, and data encryption.",
+      "name": "Heymeena",
+      "tagline": "Multi-tenant AI Voice Receptionist Platform",
+      "summary": "AI voice receptionist that answers calls in real time, books appointments and bills by the minute.",
+      "period": "September 2026 — Present",
+      "role": "Core Engineer (team of ~3)",
+      "description": "AI voice agents that answer inbound calls in real time for salons, restaurants, real estate and barbershops. I own billing, the cost and margin engine, the finance module, and identity and access control.",
       "achievements": [
-        "Reduced manual clinical documentation time significantly",
-        "HIPAA-compliant PHI handling with encryption",
-        "LLM-powered notes generation integrated with cloud services"
+        "Voice pipeline: LiveKit Agents with Deepgram (STT) → Claude (LLM) → Cartesia (TTS) over Telnyx SIP",
+        "Stripe billing end-to-end: subscriptions, prepaid minute top-ups, usage metering, Stripe Tax, disputes, daily reconciliation",
+        "Per-call cost and margin engine that alerts when cost per talk-minute drifts more than 10% from the model",
+        "Finance module: monthly period close state machine, tenant profitability, revenue/churn dashboards",
+        "MFA, RBAC, session revocation, two-proof account recovery and step-up auth; PostgreSQL row-level security; ~9,000 backend tests"
+      ],
+      "technologies": [
+        "Python",
+        "FastAPI",
+        "Next.js",
+        "PostgreSQL",
+        "LiveKit",
+        "Claude",
+        "Stripe",
+        "AWS"
+      ],
+      "architecture": "Deepgram → Claude → Cartesia",
+      "live": "https://heymeena.com",
+      "featured": true,
+      "tags": [
+        "Voice AI",
+        "Billing",
+        "Multi-tenant"
+      ],
+      "image": null
+    },
+    {
+      "name": "Moonaria Care",
+      "tagline": "AI Mental Wellness Companion",
+      "summary": "AI mental wellness companion with safety scanning, DSM-5 grounded answers and real-time voice.",
+      "period": "2025 — 2026",
+      "role": "Sole Developer",
+      "description": "A tool-calling AI companion with 14 tools and 10 therapy frameworks. Every message is safety-scanned, answers are grounded in DSM-5 via RAG, and it supports real-time voice in 6 languages.",
+      "achievements": [
+        "Tool-calling LLM agent with 14 tools: safety scanning, DSM-5 retrieval, therapy-mode selection, mood/sleep logging, therapist finder",
+        "Safety-scan layer classifying suicide/self-harm risk, intent and age group before every reply",
+        "RAG over DSM-5 with OpenAI text-embedding-3-large and Pinecone",
+        "Real-time voice on LiveKit (Deepgram → GPT-4o-mini → Cartesia) with roleplay avatars and cloned voices",
+        "Web (PWA), mobile, WhatsApp and Telegram in 6 languages; credit-based Stripe billing on token costs"
+      ],
+      "technologies": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "PostgreSQL",
+        "OpenAI",
+        "LiveKit",
+        "Pinecone",
+        "AWS"
+      ],
+      "architecture": "Tool-calling agent + RAG",
+      "live": "https://moonaria.care",
+      "featured": true,
+      "tags": [
+        "LLM Agent",
+        "RAG",
+        "Voice AI"
+      ],
+      "image": "/projects/moonaria-care.jpg"
+    },
+    {
+      "name": "Moonaria Insights",
+      "tagline": "AI Clinical Documentation & EHR for Behavioral Health",
+      "summary": "AI scribe and EHR that turns therapy sessions into structured clinical notes.",
+      "period": "November 2025 — 2026",
+      "role": "Sole Developer",
+      "description": "An AI scribe and EHR for therapists. It records and transcribes sessions, then generates SOAP and clinical notes with ICD-10/CPT coding suggestions.",
+      "achievements": [
+        "Medical speech-to-text with Deepgram Nova-2 Medical, ElevenLabs Scribe and AssemblyAI",
+        "Per-patient RAG over session transcripts (OpenAI embeddings + Pinecone) for AI chat about past sessions",
+        "One shared LLM service over OpenAI and AWS Bedrock with token tracking and plan-based limits",
+        "Manifest V3 Chrome extension capturing telehealth audio alongside existing EHRs",
+        "Digitized 125+ clinical forms (ASAM-4, CIWA/COWS, treatment plans) with AI-generated templates"
+      ],
+      "technologies": [
+        "TypeScript",
+        "React",
+        "Node.js",
+        "PostgreSQL",
+        "OpenAI",
+        "AWS Bedrock",
+        "Pinecone",
+        "AWS",
+        "GCP"
+      ],
+      "architecture": "Speech-to-text → LLM notes",
+      "live": "https://moonaria.app",
+      "featured": true,
+      "tags": [
+        "AI Scribe",
+        "EHR",
+        "RAG"
+      ],
+      "image": "/projects/moonaria-insights.jpg"
+    },
+    {
+      "name": "Docly",
+      "tagline": "AI Receptionist & Patient Scheduling SaaS",
+      "summary": "A digital front desk for clinics that turns patient chats into confirmed appointments.",
+      "period": "2025 — 2026",
+      "role": "Developer",
+      "description": "An AI receptionist that answers patients 24/7 on WhatsApp, Instagram, Messenger and clinic websites, then books them into open slots with two-way Google Calendar sync.",
+      "achievements": [
+        "Scheduling engine handling clinic hours, breaks, buffers, holidays and timezones without double-bookings",
+        "Automated WhatsApp/SMS reminders 24h and 2h before visits, with a waitlist that refills cancellations",
+        "Unified inbox across channels with one-click human takeover",
+        "LLM guardrails: admin work only, never diagnoses, hands clinical questions to staff"
       ],
       "technologies": [
         "React.js",
         "Node.js",
-        "AWS",
-        "GCP",
         "LLM",
-        "PostgreSQL"
+        "WhatsApp Business API",
+        "Google Calendar API"
       ],
-      "architecture": "Monolithic + Cloud-integrated",
-      "live": "https://moonaria.app",
-      "featured": true
+      "architecture": "Multi-channel AI agent",
+      "live": "https://docly.co.in",
+      "featured": true,
+      "tags": [
+        "WhatsApp API",
+        "Scheduling",
+        "Guardrails"
+      ],
+      "image": "/projects/docly.jpg"
     },
     {
       "name": "BEEK Health",
@@ -164,7 +326,12 @@
       ],
       "architecture": "Cloud-based (AWS)",
       "live": "https://app.beekhealth.com/login",
-      "featured": true
+      "featured": false,
+      "tags": [
+        "HealthTech",
+        "Microservices"
+      ],
+      "image": null
     },
     {
       "name": "BANG JAMIN",
@@ -184,7 +351,12 @@
       ],
       "architecture": "Microservices",
       "live": "https://bangjamin.com",
-      "featured": true
+      "featured": false,
+      "tags": [
+        "InsurTech",
+        "NestJS"
+      ],
+      "image": null
     },
     {
       "name": "BMG",
@@ -206,19 +378,24 @@
       ],
       "architecture": "ML-powered service-based",
       "live": null,
-      "featured": false
+      "featured": false,
+      "tags": [
+        "ML",
+        "Vertex AI"
+      ],
+      "image": null
     }
   ],
   "availability": {
     "heading": "Available for Freelance & Contract Work",
-    "subheading": "Open to React.js, Node.js, Python, and AI integration projects. Full stack development, microservices architecture, and cloud deployments.",
+    "subheading": "Open to AI product work: LLM agents, RAG, voice AI and AI-powered healthcare, plus the full-stack, billing and cloud work it takes to ship them.",
     "status": "Actively available — immediate start",
     "cta_email": "nikujais2405@gmail.com",
     "cta_linkedin": "https://www.linkedin.com/in/nikita-jaiswal-a20583202"
   },
   "contact": {
-    "heading": "Let's build something together",
-    "subheading": "I'm always open to discussing new projects, creative ideas, or opportunities to be part of your vision.",
-    "availability": "Available for consulting and advisory roles starting Q3 2025"
+    "heading": "Tell me about your project",
+    "subheading": "Share a few details about what you're building. I usually reply within 24 hours.",
+    "availability": "Available for freelance, contract and full-time AI product roles"
   }
 }

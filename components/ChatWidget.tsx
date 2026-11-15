@@ -1,216 +1,202 @@
 'use client';
 
-import { useState, useRef, useEffect, useCallback } from 'react';
-import { MessageSquare, X, Send, Bot, User } from 'lucide-react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { ArrowUpRight, MessageCircle, Send, X } from 'lucide-react';
+import { FALLBACK, STARTERS, WELCOME, matchTopic, topicById, type ChatAction } from '@/lib/chat-script';
+import { cn } from '@/lib/utils';
 
-interface ChatMessage {
-  role: 'user' | 'assistant';
-  content: string;
-}
+type Message =
+  | { role: 'user'; text: string }
+  | { role: 'bot'; text: string; actions?: ChatAction[]; followUps?: string[] };
+
+const TYPING_DELAY = 550;
 
 export default function ChatWidget() {
   const [isOpen, setIsOpen] = useState(false);
-  const [messages, setMessages] = useState<ChatMessage[]>([
-    {
-      role: 'assistant',
-      content: "Hi! I'm Nikita's AI assistant. Ask me anything about her experience, skills, or projects.",
-    },
-  ]);
+  const [messages, setMessages] = useState<Message[]>([{ role: 'bot', text: WELCOME, followUps: STARTERS }]);
   const [input, setInput] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const messagesEndRef = useRef<HTMLDivElement>(null);
+  const [typing, setTyping] = useState(false);
+  const endRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
-  const scrollToBottom = useCallback(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, []);
+  const timer = useRef<ReturnType<typeof setTimeout>>();
 
   useEffect(() => {
-    if (isOpen) {
-      scrollToBottom();
-      inputRef.current?.focus();
-    }
-  }, [isOpen, messages, scrollToBottom]);
+    if (isOpen) endRef.current?.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }, [isOpen, messages, typing]);
 
-  const handleSend = async () => {
-    if (!input.trim() || isLoading) return;
+  useEffect(() => {
+    if (!isOpen) return;
+    inputRef.current?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setIsOpen(false);
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isOpen]);
 
-    const userMessage = input.trim();
+  useEffect(() => () => clearTimeout(timer.current), []);
+
+  const reply = useCallback((userText: string, topicId?: string) => {
+    setMessages((prev) => [...prev, { role: 'user', text: userText }]);
+    setTyping(true);
+    const topic = topicId ? topicById(topicId) : matchTopic(userText);
+    const answer = topic ?? FALLBACK;
+    timer.current = setTimeout(() => {
+      setTyping(false);
+      setMessages((prev) => [
+        ...prev,
+        { role: 'bot', text: answer.answer, actions: answer.actions, followUps: answer.followUps },
+      ]);
+    }, TYPING_DELAY);
+  }, []);
+
+  const send = () => {
+    const text = input.trim();
+    if (!text || typing) return;
     setInput('');
-    setError(null);
-
-    const newMessages: ChatMessage[] = [
-      ...messages,
-      { role: 'user', content: userMessage },
-    ];
-    setMessages(newMessages);
-    setIsLoading(true);
-
-    try {
-      const response = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ messages: newMessages }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to get response');
-      }
-
-      setMessages((prev) => [
-        ...prev,
-        { role: 'assistant', content: data.reply },
-      ]);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Something went wrong');
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: 'assistant',
-          content: 'Sorry, I had trouble responding. Please try again in a moment.',
-        },
-      ]);
-    } finally {
-      setIsLoading(false);
-    }
+    reply(text);
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && !e.shiftKey) {
-      e.preventDefault();
-      handleSend();
-    }
-  };
+  const lastBotIndex = messages.map((m) => m.role).lastIndexOf('bot');
 
   return (
     <>
-      {/* Floating button */}
+      {/* Launcher */}
       <button
-        onClick={() => setIsOpen(!isOpen)}
-        className={`fixed bottom-6 right-6 z-[9999] w-14 h-14 rounded-full flex items-center justify-center transition-all duration-300 ${
-          isOpen
-            ? 'bg-[#1E2A45] rotate-90 scale-90'
-            : 'bg-[#6C63FF] hover:scale-110 hover:shadow-[0_0_30px_rgba(108,99,255,0.5)]'
-        }`}
+        onClick={() => setIsOpen((o) => !o)}
+        className={cn(
+          'fixed bottom-5 right-5 z-[9999] flex h-14 items-center gap-2 rounded-full pl-4 pr-5 text-sm font-semibold shadow-[0_12px_30px_-10px_rgb(var(--c-brand)/0.6)] transition-all duration-300 sm:bottom-6 sm:right-6',
+          isOpen ? 'w-14 justify-center bg-elevated pl-0 pr-0 text-ink ring-1 ring-line' : 'bg-brand text-white hover:bg-brand-hover'
+        )}
         aria-label={isOpen ? 'Close chat' : 'Open chat'}
+        aria-expanded={isOpen}
       >
         {isOpen ? (
-          <X className="w-6 h-6 text-[#F0F0F5]" />
+          <X className="h-5 w-5" />
         ) : (
-          <MessageSquare className="w-6 h-6 text-white" />
+          <>
+            <MessageCircle className="h-5 w-5" />
+            <span className="hidden sm:inline">Ask about Nikita</span>
+          </>
         )}
       </button>
 
-      {/* Chat window */}
       {isOpen && (
-        <div className="fixed bottom-24 right-6 z-[9998] w-[360px] h-[480px] rounded-2xl bg-[#141830] border border-[#1E2A45] flex flex-col overflow-hidden shadow-2xl animate-fade-in-up">
+        <div
+          role="dialog"
+          aria-label="Chat with Nikita's assistant"
+          className="fixed inset-x-3 bottom-24 top-20 z-[9998] flex animate-fade-in-up flex-col overflow-hidden rounded-3xl border border-line bg-elevated shadow-[0_30px_70px_-20px_rgb(var(--c-ink)/0.35)] sm:inset-x-auto sm:right-6 sm:top-auto sm:h-[560px] sm:max-h-[calc(100vh-8rem)] sm:w-[380px]"
+        >
           {/* Header */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-[#1E2A45] bg-[#141830]">
-            <div className="flex items-center gap-3">
-              <div className="relative">
-                <Bot className="w-5 h-5 text-[#6C63FF]" />
-                <span className="absolute -top-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse" />
-              </div>
-              <h3 className="text-sm font-semibold text-[#F0F0F5] font-[family-name:var(--font-space-grotesk)]">
-                Chat with Nikita&apos;s AI
-              </h3>
+          <div className="flex items-center gap-3 bg-brand px-5 py-4 text-white">
+            <div className="relative h-10 w-10 shrink-0 overflow-hidden rounded-full ring-2 ring-white/30">
+              <Image src="/nikita.jpg" alt="" fill sizes="40px" className="object-cover object-[50%_25%]" />
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm font-semibold">Nikita&apos;s assistant</p>
+              <p className="flex items-center gap-1.5 text-xs text-white/70">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                Instant answers about her work
+              </p>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="text-[#8892A4] hover:text-[#F0F0F5] transition-colors duration-200"
+              className="rounded-full p-1.5 text-white/70 transition-colors hover:bg-white/10 hover:text-white"
               aria-label="Close chat"
             >
-              <X className="w-4 h-4" />
+              <X className="h-4 w-4" />
             </button>
           </div>
 
-          {/* Messages area */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4">
-            {messages.map((message, index) => (
-              <div
-                key={index}
-                className={`flex gap-3 ${
-                  message.role === 'user' ? 'flex-row-reverse' : 'flex-row'
-                }`}
-              >
-                <div
-                  className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    message.role === 'user'
-                      ? 'bg-[#6C63FF]/20'
-                      : 'bg-[#00D9FF]/10'
-                  }`}
-                >
-                  {message.role === 'user' ? (
-                    <User className="w-3.5 h-3.5 text-[#6C63FF]" />
-                  ) : (
-                    <Bot className="w-3.5 h-3.5 text-[#00D9FF]" />
+          {/* Messages */}
+          <div className="chat-scroll flex-1 space-y-4 overflow-y-auto bg-page px-4 py-5" aria-live="polite">
+            {messages.map((m, i) =>
+              m.role === 'user' ? (
+                <div key={i} className="flex justify-end">
+                  <p className="max-w-[80%] rounded-2xl rounded-br-md bg-brand px-4 py-2.5 text-sm leading-relaxed text-white">
+                    {m.text}
+                  </p>
+                </div>
+              ) : (
+                <div key={i} className="space-y-2.5">
+                  <p className="max-w-[88%] whitespace-pre-line rounded-2xl rounded-bl-md border border-line bg-elevated px-4 py-3 text-sm leading-relaxed text-ink">
+                    {m.text}
+                  </p>
+
+                  {m.actions && m.actions.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {m.actions.map((a) => (
+                        <a
+                          key={a.label}
+                          href={a.href}
+                          {...(a.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                          onClick={() => a.href.startsWith('#') && setIsOpen(false)}
+                          className="inline-flex items-center gap-1 rounded-full bg-brand px-3 py-1.5 text-xs font-semibold text-white transition-colors hover:bg-brand-hover"
+                        >
+                          {a.label}
+                          <ArrowUpRight className="h-3 w-3" />
+                        </a>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Suggestions only under the latest answer */}
+                  {i === lastBotIndex && !typing && m.followUps && (
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      {m.followUps.map((id) => {
+                        const t = topicById(id);
+                        if (!t) return null;
+                        return (
+                          <button
+                            key={id}
+                            onClick={() => reply(t.label, t.id)}
+                            className="rounded-full border border-brand-soft/40 bg-elevated px-3 py-1.5 text-xs font-medium text-brand-soft transition-colors hover:border-brand-soft hover:bg-brand-tint"
+                          >
+                            {t.label}
+                          </button>
+                        );
+                      })}
+                    </div>
                   )}
                 </div>
-                <div
-                  className={`max-w-[260px] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed ${
-                    message.role === 'user'
-                      ? 'bg-[#6C63FF]/15 text-[#F0F0F5] rounded-tr-sm'
-                      : 'bg-[#0D0D1A] text-[#F0F0F5]/90 border border-[#1E2A45]/50 rounded-tl-sm'
-                  }`}
-                >
-                  {message.content}
-                </div>
-              </div>
-            ))}
-
-            {/* Typing indicator */}
-            {isLoading && (
-              <div className="flex gap-3">
-                <div className="w-7 h-7 rounded-full bg-[#00D9FF]/10 flex items-center justify-center flex-shrink-0">
-                  <Bot className="w-3.5 h-3.5 text-[#00D9FF]" />
-                </div>
-                <div className="px-4 py-3 rounded-2xl bg-[#0D0D1A] border border-[#1E2A45]/50 rounded-tl-sm">
-                  <div className="flex gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#8892A4] animate-bounce" style={{ animationDelay: '0ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-[#8892A4] animate-bounce" style={{ animationDelay: '150ms' }} />
-                    <span className="w-2 h-2 rounded-full bg-[#8892A4] animate-bounce" style={{ animationDelay: '300ms' }} />
-                  </div>
-                </div>
-              </div>
+              )
             )}
 
-            {error && (
-              <div className="text-center">
-                <span className="text-xs text-red-400 bg-red-400/10 px-3 py-1 rounded-full">
-                  {error}
-                </span>
+            {typing && (
+              <div className="flex w-fit gap-1.5 rounded-2xl rounded-bl-md border border-line bg-elevated px-4 py-3.5" aria-label="Typing">
+                {[0, 150, 300].map((d) => (
+                  <span key={d} className="h-2 w-2 animate-bounce rounded-full bg-faint" style={{ animationDelay: `${d}ms` }} />
+                ))}
               </div>
             )}
-
-            <div ref={messagesEndRef} />
+            <div ref={endRef} />
           </div>
 
-          {/* Input bar */}
-          <div className="px-4 py-3 border-t border-[#1E2A45] bg-[#141830]">
-            <div className="flex items-center gap-2">
-              <input
-                ref={inputRef}
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                onKeyDown={handleKeyDown}
-                placeholder="Ask about Nikita..."
-                className="flex-1 px-4 py-2.5 rounded-xl bg-[#0D0D1A] border border-[#1E2A45] text-sm text-[#F0F0F5] placeholder:text-[#8892A4]/60 focus:outline-none focus:border-[#6C63FF]/50 transition-colors duration-200"
-                disabled={isLoading}
-              />
-              <button
-                onClick={handleSend}
-                disabled={isLoading || !input.trim()}
-                className="w-10 h-10 rounded-xl bg-[#6C63FF] flex items-center justify-center text-white hover:bg-[#5a52e0] disabled:opacity-40 disabled:cursor-not-allowed transition-all duration-200 hover:shadow-[0_0_15px_rgba(108,99,255,0.3)]"
-                aria-label="Send message"
-              >
-                <Send className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          {/* Input */}
+          <form
+            onSubmit={(e) => {
+              e.preventDefault();
+              send();
+            }}
+            className="flex items-center gap-2 border-t border-line bg-elevated p-3"
+          >
+            <input
+              ref={inputRef}
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="Type a question…"
+              maxLength={300}
+              className="flex-1 rounded-full border border-line bg-code px-4 py-2.5 text-sm text-ink placeholder:text-faint focus:border-brand-soft focus:outline-none focus:ring-[3px] focus:ring-brand-soft/15"
+              aria-label="Your question"
+            />
+            <button
+              type="submit"
+              disabled={!input.trim() || typing}
+              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-brand text-white transition-colors hover:bg-brand-hover disabled:opacity-40"
+              aria-label="Send"
+            >
+              <Send className="h-4 w-4" />
+            </button>
+          </form>
         </div>
       )}
     </>

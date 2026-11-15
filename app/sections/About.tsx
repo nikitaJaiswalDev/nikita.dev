@@ -1,148 +1,59 @@
-'use client';
-
-import { useEffect, useRef, useState } from 'react';
+import Image from 'next/image';
+import { CheckCircle2 } from 'lucide-react';
 import content from '../../content.json';
+import Reveal from '@/components/site/Reveal';
 
+const points = [
+  '5+ years of hands-on development experience',
+  '4 live AI products, taken from idea to production',
+  'Healthcare-grade by default: encryption, RBAC, audit logs',
+  'Clean, tested, secure architecture (~9k backend tests on Heymeena)',
+];
+
+/** About column; rendered next to Experience inside the "story" section. */
 export default function About() {
-  const { about, skills } = content;
-  const sectionRef = useRef<HTMLElement>(null);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsVisible(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current);
-    }
-
-    return () => observer.disconnect();
-  }, []);
-
-  const skillCategories = [
-    { label: 'Languages', skills: skills.languages },
-    { label: 'Frontend', skills: skills.frontend },
-    { label: 'Backend', skills: skills.backend },
-    { label: 'Cloud & Infra', skills: skills.cloud },
-    { label: 'Databases', skills: skills.databases },
-    { label: 'Tools', skills: skills.tools },
-  ];
+  const { personal } = content;
 
   return (
-    <section
-      id="about"
-      ref={sectionRef}
-      className="relative py-20 px-4 sm:px-6 lg:px-8 bg-[#0F1628] border-b border-[#1E2A45]"
-    >
-      <div className="max-w-6xl mx-auto">
-        {/* Section header */}
-        <div className={`mb-12 transition-all duration-700 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-          <span className="section-eyebrow">About</span>
-          <h2 className="mt-3 font-[family-name:var(--font-space-grotesk)] gradient-text" style={{ fontWeight: 700, fontSize: 'clamp(32px, 4vw, 48px)' }}>
-            Engineer at heart, <span className="text-gradient">builder by craft</span>
+    <div id="about" className="scroll-mt-28">
+      <Reveal>
+        <span className="eyebrow">About me</span>
+      </Reveal>
+
+      <div className="mt-6 grid items-start gap-8 sm:grid-cols-[200px_1fr] lg:grid-cols-1 xl:grid-cols-[200px_1fr]">
+        <Reveal delay={80} className="relative">
+          <div className="relative aspect-[4/5] overflow-hidden rounded-3xl bg-gradient-to-br from-brand-tint to-highlight">
+            {personal.photo ? (
+              <Image src={personal.photo} alt={personal.name} fill sizes="(min-width: 640px) 200px, 100vw" className="object-cover object-[50%_30%]" />
+            ) : (
+              <div className="flex h-full items-center justify-center font-display text-6xl font-semibold text-brand/70">NJ</div>
+            )}
+          </div>
+          {/* doodle */}
+          <svg aria-hidden viewBox="0 0 60 50" className="absolute -top-6 right-0 h-12 w-14 text-ink sm:-right-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round">
+            <path d="M6 44 C 16 30, 22 18, 40 6 C 46 2, 54 6, 48 14 C 40 24, 26 30, 14 36" />
+            <path d="M14 36 L 8 30 M14 36 L 20 40" />
+          </svg>
+        </Reveal>
+
+        <Reveal delay={140}>
+          <h2 className="text-[clamp(1.9rem,3.5vw,2.4rem)] font-semibold leading-[1.1] text-ink">
+            Engineer, builder, and product thinker.
           </h2>
-        </div>
-
-        <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
-          {/* Left column — About text & Details */}
-          <div className={`space-y-8 transition-all duration-700 delay-150 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            <p className="text-base sm:text-lg text-[#F0F0F5]/90 leading-relaxed">
-              {about.summary}
-            </p>
-
-            {/* Terminal style metadata card */}
-            <div className="w-full bg-[#0D1117] border border-[#1E2A45] rounded-xl p-5 font-mono-label shadow-xl">
-              {/* macOS window dots */}
-              <div className="flex gap-1.5 mb-4">
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FF5F57]"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#FFBD2E]"></span>
-                <span className="w-2.5 h-2.5 rounded-full bg-[#28CA41]"></span>
-              </div>
-              
-              <div className="text-xs sm:text-sm space-y-2 text-[#8892A4] leading-relaxed">
-                <div>
-                  <span className="text-[#6C63FF]">Location:</span> <span className="text-[#F0F0F5]">Ludhiana, Punjab, India</span>
-                </div>
-                <div>
-                  <span className="text-[#6C63FF]">Experience:</span> <span className="text-[#F0F0F5]">5+ Years</span>
-                </div>
-                <div>
-                  <span className="text-[#6C63FF]">Specialization:</span> <span className="text-[#F0F0F5]">Full Stack + AI Integration</span>
-                </div>
-                <div>
-                  <span className="text-[#6C63FF]">Education:</span> <span className="text-[#F0F0F5]">MCA — PCTE Group of Institutes</span>
-                </div>
-                <div>
-                  <span className="text-[#6C63FF]">Status:</span> <span className="text-[#00D9FF] font-semibold">Available for Freelance</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Highlights */}
-            <div className="space-y-3.5">
-              {about.highlights.map((highlight, index) => (
-                <div
-                  key={index}
-                  className="flex items-start gap-3 group"
-                >
-                  <span className="text-[#6C63FF] text-base mt-0.5 flex-shrink-0 group-hover:text-[#00D9FF] transition-colors duration-300">
-                    ✦
-                  </span>
-                  <span className="text-[#8892A4] group-hover:text-[#F0F0F5]/80 transition-colors duration-300 text-sm leading-relaxed">
-                    {highlight}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Awards cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2">
-              <div className="flex items-center gap-3.5 p-4 bg-[#141830] border border-[#1E2A45] rounded-xl hover:border-[#6C63FF] transition-all duration-300 group">
-                <span className="text-2xl group-hover:scale-110 transition-transform duration-300">🏆</span>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-[#F0F0F5] leading-tight">Employee of the Month</h4>
-                  <p className="text-[11px] text-[#8892A4] mt-1 font-mono-label">LN Webworks, 2022</p>
-                </div>
-              </div>
-              <div className="flex items-center gap-3.5 p-4 bg-[#141830] border border-[#1E2A45] rounded-xl hover:border-[#6C63FF] transition-all duration-300 group">
-                <span className="text-2xl group-hover:scale-110 transition-transform duration-300">⭐</span>
-                <div>
-                  <h4 className="text-xs sm:text-sm font-bold text-[#F0F0F5] leading-tight">Rising Star Award</h4>
-                  <p className="text-[11px] text-[#8892A4] mt-1 font-mono-label">LN Webworks, 2022</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Right column — Skills */}
-          <div id="skills" className={`space-y-6 lg:space-y-8 transition-all duration-700 delay-300 ${isVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
-            {skillCategories.map((category) => (
-              <div key={category.label}>
-                <h3 className="section-eyebrow mb-3">
-                  {category.label}
-                </h3>
-                <div className="flex flex-wrap gap-2">
-                  {category.skills.map((skill) => (
-                    <span
-                      key={skill}
-                      className="skill-chip px-3 py-1.5 rounded-md text-sm cursor-default"
-                    >
-                      {skill}
-                    </span>
-                  ))}
-                </div>
-              </div>
+          <p className="mt-4 text-[15px] leading-relaxed text-subtle">
+            I&apos;m {personal.name}, an AI product engineer who likes owning a product from the first schema to the
+            last Stripe webhook, especially in healthcare and mental wellness, where getting the details right matters.
+          </p>
+          <ul className="mt-5 space-y-2.5">
+            {points.map((p) => (
+              <li key={p} className="flex gap-2.5 text-sm text-ink">
+                <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-brand-soft" aria-hidden />
+                {p}
+              </li>
             ))}
-          </div>
-        </div>
+          </ul>
+        </Reveal>
       </div>
-    </section>
+    </div>
   );
 }
